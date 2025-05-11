@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romantic Surprise</title>
+    <style>
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+
+        .container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .love-icon {
+            position: absolute;
+            color: #ff4d4d;
+            font-size: 24px;
+            animation: float 6s linear infinite;
+            opacity: 0;
+        }
+
+        /* Lyrics Styling */
+        .lyrics {
+            text-align: center;
+            color: white;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 20px;
+            min-height: 60px;
+        }
+
+        .typing {
+            border-right: 2px solid white;
+            animation: blink 0.75s step-end infinite;
+        }
+
+        /* Special Button */
+        .special-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #ffffff;
+            color: #ff6b6b;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .special-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Panda Animation */
+        .panda {
+            position: absolute;
+            bottom: 20%;
+            width: 150px;
+            height: 150px;
+            animation: blow 2s infinite;
+        }
+
+        .panda-body {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 50%;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: inset 0 -15px 0 rgba(0,0,0,0.1);
+        }
+
+        .panda-ear {
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: -10px;
+            z-index: -1;
+        }
+
+        .panda-ear.left { 
+            left: 10px;
+            transform: rotate(-30deg);
+        }
+
+        .panda-ear.right { 
+            right: 10px;
+            transform: rotate(30deg);
+        }
+
+        .panda-eye {
+            width: 25px;
+            height: 25px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+        }
+
+        .panda-eye.left { 
+            left: 20px;
+            transform: rotate(25deg);
+        }
+
+        .panda-eye.right { 
+            right: 20px;
+            transform: rotate(-25deg);
+        }
+
+        .panda-eye::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+        }
+
+        .panda-nose {
+            width: 12px;
+            height: 8px;
+            background: #000;
+            border-radius: 40%;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .panda-mouth {
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            border: 3px solid #000;
+            border-radius: 0 0 30px 30px;
+            border-top: 0;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .panda-arm {
+            width: 50px;
+            height: 25px;
+            background: #fff;
+            position: absolute;
+            bottom: 30px;
+            border-radius: 20px;
+            animation: armMove 1s infinite;
+        }
+
+        .panda-arm.left {
+            left: -40px;
+            transform: rotate(30deg);
+        }
+
+        .panda-arm.right {
+            right: -40px;
+            transform: rotate(-30deg);
+        }
+
+        /* Balloon Animation */
+        .balloon-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .balloon {
+            font-size: 10px;
+            animation: inflate 5s forwards;
+            position: relative;
+            z-index: 2;
+            filter: saturate(200%) brightness(1.2) drop-shadow(0 0 5px rgba(255,50,50,0.5));
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .name-below-panda {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: black;
+            font-size: 1.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
+        }
+
+        .explosion {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0;
+            animation: pop 0.5s 5s forwards;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        .lyrics span {
+            opacity: 0;
+            animation: fadeIn 0.1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes inflate {
+            0% { transform: scale(1); }
+            50% { transform: scale(15); }
+            100% { transform: scale(20); opacity: 0; }
+        }
+
+        @keyframes blow {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes armMove {
+            0% { transform: rotate(30deg); }
+            50% { transform: rotate(20deg); }
+            100% { transform: rotate(30deg); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lyrics" id="lyrics"></div>
+        <button class="special-button" id="specialButton" onclick="showBalloon()">Buka Kejutan Spesial ❤️</button>
+    </div>
+
+    <div class="balloon-container" id="balloonContainer">
+        <div class="panda">
+            <div class="panda-ear left"></div>
+            <div class="panda-ear right"></div>
+            <div class="panda-body"></div>
+            <div class="panda-eye left"></div>
+            <div class="panda-eye right"></div>
+            <div class="panda-nose"></div>
+            <div class="panda-mouth"></div>
+            <div class="panda-arm left"></div>
+            <div class="panda-arm right"></div>
+        </div>
+        <div class="balloon">❤️</div>
+        <div class="explosion">I Love You</div>
+        <div class="name-below-panda" id="namaPengirim">
+            Dari Suami Mu<br>
+            ❤️
+        </div>
+    </div>
+
+    <script>
+        // Sound Effects
+        function playSound(frequency, duration) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        // Create Floating Hearts
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'love-icon';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 6000);
+            }, 300);
+        }
+
+        // Typewriter Effect
+        const lyrics = [
+            "Untuk mu Yang Tersayang...",
+            "Setiap detik bersamamu...",
+            "Adalah momen terindah...",
+            "Kau mengisi setiap relung hatiku...",
+            "Terima kasih untuk segala cintamu...",
+            "Aku akan selalu...",
+            "Menyayangimu... ❤️"
+        ];
+
+        let lyricIndex = 0;
+        const lyricsElement = document.getElementById('lyrics');
+        const specialButton = document.getElementById('specialButton');
+
+        async function typeLyric(text) {
+            lyricsElement.classList.add('typing');
+            playSound(500, 0.1);
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = document.createElement('span');
+                char.textContent = text[i];
+                lyricsElement.appendChild(char);
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            lyricsElement.classList.remove('typing');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const spans = lyricsElement.querySelectorAll('span');
+            for (let i = 0; i < spans.length; i++) {
+                spans[i].style.animation = 'fadeIn 0.1s reverse forwards';
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+            
+            while(lyricsElement.firstChild) {
+                lyricsElement.removeChild(lyricsElement.firstChild);
+            }
+        }
+
+        async function showLyrics() {
+            for (const lyric of lyrics) {
+                await typeLyric(lyric);
+            }
+            specialButton.style.display = 'block';
+        }
+
+        function showBalloon() {
+            playSound(800, 0.5);
+            document.querySelector('.container').style.display = 'none';
+            const balloonContainer = document.getElementById('balloonContainer');
+            balloonContainer.style.display = 'flex';
+            
+            document.getElementById('namaPengirim').style.display = 'block';
+
+            setTimeout(() => {
+                playSound(1200, 0.2);
+                balloonContainer.style.background = 'transparent';
+            }, 5000);
+        }
+
+        // Initialize
+        window.onload = () => {
+            createHearts();
+            showLyrics();
+        }
+    </script>
+</body>
+</html>
