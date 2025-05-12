@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Animation</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #ffaf40);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Sans MS', cursive;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cake {
+            font-size: 8em;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .candle {
+            position: absolute;
+            bottom: 120px;
+            width: 20px;
+            height: 60px;
+            background: #fff;
+            border-radius: 5px;
+            animation: flicker 0.1s infinite;
+        }
+
+        .candle:nth-child(1) { left: 35%; }
+        .candle:nth-child(2) { left: 45%; }
+        .candle:nth-child(3) { left: 55%; }
+        .candle:nth-child(4) { left: 65%; }
+
+        .flame {
+            position: absolute;
+            width: 15px;
+            height: 25px;
+            background: #ff9f43;
+            border-radius: 50% 50% 35% 35%;
+            bottom: 175px;
+            animation: flame 0.2s infinite;
+        }
+
+        .title {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 3px 3px 0 #ff4757;
+            animation: bounce 1.5s infinite;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            border-radius: 50%;
+            animation: sparkle 1s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes flame {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .message {
+            font-size: 1.5em;
+            color: #fff;
+            margin: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .hearts span {
+            position: absolute;
+            font-size: 1.5em;
+            animation: heartFloat 6s linear infinite;
+        }
+
+        @keyframes heartFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🎉 Happy Birthday! 🎂</h1>
+        
+        <div class="message">
+            <p>Semoga hari spesialmu penuh<br> 
+            kebahagiaan dan keceriaan! 🎁🎈</p>
+        </div>
+
+        <div class="cake">
+            🎂
+            <div class="candle"></div>
+            <div class="candle"></div>
+            <div class="candle"></div>
+            <div class="candle"></div>
+            
+            <div class="flame" style="left: 35%"></div>
+            <div class="flame" style="left: 45%"></div>
+            <div class="flame" style="left: 55%"></div>
+            <div class="flame" style="left: 65%"></div>
+        </div>
+    </div>
+
+    <script>
+        // Create sparkles
+        function createSparkles() {
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + 'vw';
+                sparkle.style.top = Math.random() * 100 + 'vh';
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1000);
+            }, 100);
+        }
+
+        // Create floating hearts
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement('span');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+                document.querySelector('.hearts').appendChild(heart);
+                setTimeout(() => heart.remove(), 6000);
+            }, 300);
+        }
+
+        // Blow out candles
+        document.querySelector('.cake').addEventListener('click', () => {
+            document.querySelectorAll('.flame').forEach(flame => {
+                flame.style.animation = 'none';
+                flame.innerHTML = '💨';
+                flame.style.fontSize = '1.5em';
+                setTimeout(() => flame.remove(), 1000);
+            });
+            
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.innerHTML = '🎉 Semoga semua harapanmu terkabul! 🎉';
+            document.querySelector('.container').appendChild(message);
+        });
+
+        // Initialize
+        window.onload = () => {
+            createSparkles();
+            createHearts();
+        }
+    </script>
+</body>
+</html>

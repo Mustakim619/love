@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Kamu yang Tersayang</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff3366;
+            --secondary-color: #ff758c;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Dancing Script', cursive;
+            position: relative;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5rem;
+            animation: float 8s linear infinite;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(calc(-50vw + 100px), 110vh) rotate(-45deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(50vw - 100px), -10vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        #loveMessage {
+            font-size: 2.5rem;
+            color: white;
+            text-align: center;
+            min-height: 120px;
+            margin: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
+        }
+
+        #surpriseBtn {
+            padding: 1rem 3rem;
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            display: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        #surpriseBtn:hover {
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .heart-particle {
+            position: absolute;
+            font-size: 1rem;
+            color: white;
+            transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        #finalAnimation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 1s;
+            font-size: 0;
+            text-align: center;
+        }
+
+        .love-text {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 51, 102, 0.8);
+            margin-top: 2rem;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="heartsContainer"></div>
+    <div id="loveMessage"></div>
+    <button id="surpriseBtn">Buka Pesan Rahasia 💌</button>
+    <div id="finalAnimation"></div>
+
+    <script>
+        // Floating hearts animation
+        function createFloatingHearts() {
+            setInterval(() => {
+                const heart = document.createElement('i');
+                heart.className = 'floating-heart fas fa-heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                heart.style.fontSize = (Math.random() * 1 + 1.5) + 'rem';
+                document.getElementById('heartsContainer').appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 8000);
+            }, 300);
+        }
+
+        // Custom messages
+        const messages = [
+            "Istri Ku TerSayang...",
+            "Setiap Hari Bersamamu...",
+            "Adalah...",
+            "Anugerah Yang Tak Ternilai...",
+            "Terima Kasih...",
+            "Karena Telah Menjadi...",
+            "rumah terindah dalam hidupku...",
+            "Sahabat Terbaik Dan...",
+            "Bagian Dari Jiwaku...",
+            "Aku Tahu Hudup...",
+            "Tidak Selalu Mudah...",
+            "Tapi Kamu Selalu...",
+            "Kuat Dan Luar Biasa...",
+            "Aku Bangga Padamu Dan...",
+            "Akan Selalu Ada Untuk Mu...",
+            "Semoga Allah Menjaga Cinta Kita...",
+            "Menjadikannya...",
+            "Sakinah, Mawadah, Warahmah ...",
+            "Dan Membawa Kita Bersama...",
+            "Hingga Ke Surga-Nya...",
+            "Aku Mencintaimu...",
+            "Sepenuh Hati...",
+            "Dunia Dan Akhirat...",
+            "💖 Kamu adalah Kesayangan Ku  💖"
+        ];
+
+        let currentMessage = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingDelay = 150;
+        const deletingDelay = 75;
+        const pauseBetween = 2000;
+
+        function typeWriter() {
+            const text = messages[currentMessage];
+            const display = document.getElementById('loveMessage');
+            
+            if (!isDeleting) {
+                display.textContent = text.substring(0, charIndex++);
+                if (charIndex > text.length) {
+                    isDeleting = true;
+                    setTimeout(typeWriter, pauseBetween);
+                    return;
+                }
+            } else {
+                display.textContent = text.substring(0, charIndex--);
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    currentMessage++;
+                    
+                    if (currentMessage >= messages.length) {
+                        showButton();
+                        return;
+                    }
+                }
+            }
+
+            setTimeout(typeWriter, isDeleting ? deletingDelay : typingDelay);
+        }
+
+        function showButton() {
+            document.getElementById('surpriseBtn').style.display = 'block';
+        }
+
+        // Final animation
+        function createFinalAnimation() {
+            document.getElementById('surpriseBtn').style.display = 'none';
+            document.getElementById('loveMessage').style.display = 'none';
+            document.getElementById('heartsContainer').innerHTML = '';
+
+            const particles = [];
+            const totalParticles = 200;
+            
+            // Create heart particles
+            for (let i = 0; i < totalParticles; i++) {
+                const particle = document.createElement('i');
+                particle.className = 'heart-particle fas fa-heart';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.opacity = '1';
+                document.body.appendChild(particle);
+                particles.push(particle);
+            }
+
+            // Animate to form heart shape
+            setTimeout(() => {
+                particles.forEach((particle, index) => {
+                    const angle = (index * 2 * Math.PI) / totalParticles;
+                    const x = 50 + 30 * Math.pow(Math.sin(angle), 3);
+                    const y = 50 - 30 * (13 * Math.cos(angle) - 
+                               5 * Math.cos(2 * angle) - 
+                               2 * Math.cos(3 * angle) - 
+                               Math.cos(4 * angle));
+                    
+                    particle.style.left = x + 'vw';
+                    particle.style.top = y + 'vh';
+                    particle.style.fontSize = '1.5rem';
+                    particle.style.opacity = '0.8';
+                });
+
+                // Show final message
+                setTimeout(() => {
+                    const finalDiv = document.getElementById('finalAnimation');
+                    finalDiv.innerHTML = `
+                        <i class="fas fa-heartbeat" style="font-size: 10rem; color: white; animation: pulse 1s infinite"></i>
+                        <div class="love-text">Terima Kasih Telah Ada<br>💞 Di HidupKu 💞</div>
+                    `;
+                    finalDiv.style.opacity = '1';
+                    finalDiv.style.fontSize = '10rem';
+                    
+                    document.querySelector('.love-text').style.opacity = '1';
+                }, 1000);
+            }, 100);
+        }
+
+        // Initialize
+        window.onload = () => {
+            createFloatingHearts();
+            typeWriter();
+            
+            document.getElementById('surpriseBtn').addEventListener('click', createFinalAnimation);
+        };
+    </script>
+</body>
+</html>
